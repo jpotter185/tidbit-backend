@@ -23,7 +23,4 @@ fi
 sleep 3
 
 echo -e "${GREEN}Containers started successfully!${NC}"
-docker compose ps
-
-echo -e "${YELLOW}Showing logs (Ctrl+C to exit)...${NC}"
-docker compose logs -f
+docker compose ps\
