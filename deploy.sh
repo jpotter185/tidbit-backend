@@ -7,17 +7,6 @@ NC='\033[0m'
 
 echo -e "${GREEN}Starting tidbit deployment...${NC}"
 
-# Build the Go binary first to catch any compile errors
-echo -e "${YELLOW}Building Go binary...${NC}"
-go build ./...
-
-if [ $? -ne 0 ]; then
-    echo -e "${RED}Go build failed!${NC}"
-    exit 1
-fi
-
-echo -e "${GREEN}Go build successful!${NC}"
-
 # Stop existing containers
 echo -e "${YELLOW}Stopping existing containers...${NC}"
 docker compose down
