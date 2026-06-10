@@ -22,7 +22,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           proxy_host: ssh.tallyo.us
           proxy_port: 443
-          proxy_command: cloudflared access ssh --hostname %h
+          proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/projects/tidbit-backend
             git pull origin main
