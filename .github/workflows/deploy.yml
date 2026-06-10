@@ -14,16 +14,18 @@ jobs:
           curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -o cloudflared.deb
           sudo dpkg -i cloudflared.deb
 
-      - name: Deploy to server
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ssh.tallyo.us
-          username: gh-svc-account
-          key: ${{ secrets.GH_SVC_ACCOUNT }}
-          proxy_host: ssh.tallyo.us
-          proxy_port: 443
-          proxy_key: ${{ secrets.GH_SVC_ACCOUNT }}
-          script: |
-            cd ~/projects/tidbit-backend
-            git pull origin main
-            ./deploy.sh
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GH_SVC_ACCOUNT }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "Host ssh.tallyo.us
+            HostName ssh.tallyo.us
+            User gh-svc-account
+            IdentityFile ~/.ssh/deploy_key
+            ProxyCommand cloudflared access ssh --hostname %h
+            StrictHostKeyChecking no" > ~/.ssh/config
+
+      - name: Deploy
+        run: |
+          ssh gh-svc-account@ssh.tallyo.us "cd ~/projects/tidbit-backend && git pull origin main && ./deploy.sh"
