@@ -6,6 +6,7 @@ services:
       - "6769"
     environment:
       - PORT=6769
+      - API_KEY=${API_KEY}
     restart: unless-stopped
     networks:
       - app-network

@@ -1,19 +1,33 @@
 package main
 
 import (
-    "net/http"
-    "strconv"
+	"net/http"
+	"os"
+	"strconv"
 
-    "github.com/gin-gonic/gin"
-    "tidbit-backend/internal/weather"
+	"tidbit-backend/internal/weather"
+
+	"github.com/gin-gonic/gin"
 )
+
+func apiKeyMiddleware() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        key := c.GetHeader("X-API-Key")
+        if key != os.Getenv("API_KEY") {
+            c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+            c.Abort()
+            return
+        }
+        c.Next()
+    }
+}
 
 func main() {
     weatherClient := weather.NewWeatherClient()
 
     r := gin.Default()
 
-    r.GET("/api/v1/weather", func(c *gin.Context) {
+    r.GET("/api/v1/weather", apiKeyMiddleware(), func(c *gin.Context) {
         latStr := c.Query("lat")
         lonStr := c.Query("lon")
 
