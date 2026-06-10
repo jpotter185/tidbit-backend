@@ -19,10 +19,10 @@ jobs:
         with:
           host: ssh.tallyo.us
           username: gh-svc-account
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.GH_SVC_ACCOUNT }}
           proxy_host: ssh.tallyo.us
           proxy_port: 443
-          proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          proxy_key: ${{ secrets.GH_SVC_ACCOUNT }}
           script: |
             cd ~/projects/tidbit-backend
             git pull origin main
