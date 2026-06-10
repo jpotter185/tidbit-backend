@@ -1,0 +1,15 @@
+services:
+  tidbit:
+    build: .
+    container_name: tidbit-backend
+    expose:
+      - "6769"
+    environment:
+      - PORT=6769
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
