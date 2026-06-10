@@ -7,6 +7,7 @@ services:
     environment:
       - PORT=6769
       - API_KEY=${API_KEY}
+      - GIN_MODE=release
     restart: unless-stopped
     networks:
       - app-network
