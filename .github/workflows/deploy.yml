@@ -19,12 +19,16 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.GH_SVC_ACCOUNT }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "Host ssh.tallyo.us
-            HostName ssh.tallyo.us
-            User gh-svc-account
-            IdentityFile ~/.ssh/deploy_key
-            ProxyCommand cloudflared access ssh --hostname %h
-            StrictHostKeyChecking no" > ~/.ssh/config
+          cat > ~/.ssh/config << 'EOF'
+          Host ssh.tallyo.us
+              HostName ssh.tallyo.us
+              User gh-svc-account
+              IdentityFile ~/.ssh/deploy_key
+              ProxyCommand cloudflared access ssh --hostname %h
+              StrictHostKeyChecking no
+              UserKnownHostsFile=/dev/null
+          EOF
+          chmod 600 ~/.ssh/config
 
       - name: Deploy
         run: |
