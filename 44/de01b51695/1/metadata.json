@@ -1,0 +1,55 @@
+{
+  "cli_version": "0.7.8",
+  "checkpoint_id": "44de01b51695",
+  "session_id": "d2de4d26-cf51-4464-b6f8-73a4364698b5",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-04T02:49:12.430611Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [
+    "CLAUDE.md",
+    "internal/weather/handler.go"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "0b4ea1e41eff",
+  "token_usage": {
+    "input_tokens": 24,
+    "cache_creation_tokens": 47635,
+    "cache_read_tokens": 414650,
+    "output_tokens": 6719,
+    "api_call_count": 12
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-04T02:49:12.422595Z",
+    "agent_lines": 76,
+    "agent_removed": 6,
+    "human_added": 84,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 160,
+    "total_lines_changed": 166,
+    "agent_percentage": 49.39759036144578,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 160,
+      "agent_lines_removed": 6
+    }
+  ]
+}
