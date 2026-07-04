@@ -5,6 +5,13 @@ import (
     "fmt"
     "net/http"
     "strconv"
+    "time"
+)
+
+const (
+    requestTimeout = 10 * time.Second
+    maxAttempts    = 3
+    retryDelay     = 500 * time.Millisecond
 )
 
 type WeatherClient struct {
@@ -15,7 +22,7 @@ type WeatherClient struct {
 func NewWeatherClient() *WeatherClient {
     return &WeatherClient{
         BaseURL:    "https://api.open-meteo.com/v1/forecast",
-        HTTPClient: &http.Client{},
+        HTTPClient: &http.Client{Timeout: requestTimeout},
     }
 }
 
@@ -27,22 +34,39 @@ func (w *WeatherClient) GetWeather(req WeatherRequest) (*WeatherResponse, error)
         strconv.FormatFloat(req.Longitude, 'f', 4, 64),
     )
 
+    var lastErr error
+    for attempt := 1; attempt <= maxAttempts; attempt++ {
+        raw, err := w.fetch(url)
+        if err == nil {
+            return parseResponse(raw), nil
+        }
+        lastErr = err
+        if attempt < maxAttempts {
+            time.Sleep(retryDelay * time.Duration(attempt))
+        }
+    }
+
+    return nil, lastErr
+}
+
+func (w *WeatherClient) fetch(url string) (openMeteoResponse, error) {
+    var raw openMeteoResponse
+
     resp, err := w.HTTPClient.Get(url)
     if err != nil {
-        return nil, fmt.Errorf("failed to call open-meteo: %w", err)
+        return raw, fmt.Errorf("failed to call open-meteo: %w", err)
     }
     defer resp.Body.Close()
 
     if resp.StatusCode != http.StatusOK {
-        return nil, fmt.Errorf("unexpected status from open-meteo: %d", resp.StatusCode)
+        return raw, fmt.Errorf("unexpected status from open-meteo: %d", resp.StatusCode)
     }
 
-    var raw openMeteoResponse
     if err := json.NewDecoder(resp.Body).Decode(&raw); err != nil {
-        return nil, fmt.Errorf("failed to decode response: %w", err)
+        return raw, fmt.Errorf("failed to decode response: %w", err)
     }
 
-    return parseResponse(raw), nil
+    return raw, nil
 }
 
 func parseResponse(raw openMeteoResponse) *WeatherResponse {
