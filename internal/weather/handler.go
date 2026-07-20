@@ -3,6 +3,7 @@ package weather
 import (
     "encoding/json"
     "fmt"
+    "math"
     "net/http"
     "strconv"
     "time"
@@ -91,15 +92,21 @@ func parseResponse(raw openMeteoResponse) (*WeatherResponse, error) {
     }
 
     return &WeatherResponse{
-        CurrentTemperature: int(raw.Current.Temperature),
-        FeelsLike:          int(raw.Current.ApparentTemperature),
+        CurrentTemperature: round(raw.Current.Temperature),
+        FeelsLike:          round(raw.Current.ApparentTemperature),
         IsDay:              raw.Current.IsDay,
         WeatherCode:        raw.Current.WeatherCode,
-        Humidity:           int(raw.Current.Humidity),
-        MinTemp:            int(raw.Daily.MinTemp[0]),
-        MaxTemp:            int(raw.Daily.MaxTemp[0]),
-        PrecipProbability:  int(raw.Hourly.PrecipProbability[currentHour]),
-        UVIndex:            int(raw.Hourly.UVIndex[currentHour]),
+        Humidity:           round(raw.Current.Humidity),
+        MinTemp:            round(raw.Daily.MinTemp[0]),
+        MaxTemp:            round(raw.Daily.MaxTemp[0]),
+        PrecipProbability:  round(raw.Hourly.PrecipProbability[currentHour]),
+        UVIndex:            round(raw.Hourly.UVIndex[currentHour]),
         TZOffset:           raw.UtcOffsetSeconds / 3600,
     }, nil
+}
+
+// round converts to the nearest integer rather than truncating toward
+// zero, so 72.9 displays as 73 and -5.9 as -6.
+func round(f float64) int {
+    return int(math.Round(f))
 }

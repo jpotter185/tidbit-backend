@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"os"
 	"strconv"
@@ -167,8 +168,8 @@ func main() {
 
         reading, found := store.LatestNear(lat, lon, sensorRadiusKm)
         if found && time.Since(time.Unix(reading.Timestamp, 0)) <= maxSensorAge {
-            result.CurrentTemperature = int(reading.Temperature)
-            result.Humidity = int(reading.Humidity)
+            result.CurrentTemperature = int(math.Round(reading.Temperature))
+            result.Humidity = int(math.Round(reading.Humidity))
         }
 
         c.JSON(http.StatusOK, result)

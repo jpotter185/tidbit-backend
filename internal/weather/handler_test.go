@@ -8,11 +8,11 @@ func validResponse() openMeteoResponse {
 		UtcOffsetSeconds: -14400,
 		Current: openMeteoCurrent{
 			Time:        "2026-07-19T21:00",
-			Temperature: 71.3,
+			Temperature: 70.6,
 			Humidity:    51,
 		},
 		Daily: openMeteoDaily{
-			MaxTemp: []float64{81.1},
+			MaxTemp: []float64{80.5},
 			MinTemp: []float64{66.2},
 		},
 		Hourly: openMeteoHourly{
@@ -27,6 +27,7 @@ func TestParseResponseValid(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
+	// 70.6 and 80.5 round to 71 and 81; truncation would give 70 and 80.
 	if resp.CurrentTemperature != 71 || resp.MinTemp != 66 || resp.MaxTemp != 81 || resp.TZOffset != -4 {
 		t.Errorf("unexpected response: %+v", resp)
 	}
