@@ -1,0 +1,25 @@
+Thanks. Okay now- I want to add a new POST endpoint for the weather. I'm going to set up my own temperature and humidity sensor and send it to the server. I want to save it somewhere and then on the get calls it will return.
+
+---
+
+I want the existing get endpoint to include the sensor data in the existing response structure, if the weather data is valid for the latitude and lingitude
+
+---
+
+Can you add some descriptive logging to the server? I want to see the requests and responses (api key hidden)
+
+---
+
+On the sensor data, can we add a "sensorName" field and generate an identifier for it?
+
+---
+
+Okay I want the id to identifier the data point, not the name of the sensor
+
+---
+
+Any concerns?
+
+---
+
+Fix 2 and 3

@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.7.8",
+  "checkpoint_version": "branch-v1",
+  "checkpoint_id": "d68c9350e1ba",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 8,
+  "files_touched": [
+    "CLAUDE.md",
+    "Dockerfile",
+    "cmd/server/main.go",
+    "docker-compose.yml",
+    "internal/sensor/store.go",
+    "internal/weather/handler.go",
+    "internal/weather/handler_test.go"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d6/8c9350e1ba/0/metadata.json",
+      "transcript": "/d6/8c9350e1ba/0/full.jsonl",
+      "compact_transcript": "/d6/8c9350e1ba/0/transcript.jsonl",
+      "content_hash": "/d6/8c9350e1ba/0/content_hash.txt",
+      "prompt": "/d6/8c9350e1ba/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 266,
+    "cache_creation_tokens": 53667,
+    "cache_read_tokens": 2681644,
+    "output_tokens": 47407,
+    "api_call_count": 47
+  }
+}
