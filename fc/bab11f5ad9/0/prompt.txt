@@ -1,0 +1,96 @@
+Thanks. Okay now- I want to add a new POST endpoint for the weather. I'm going to set up my own temperature and humidity sensor and send it to the server. I want to save it somewhere and then on the get calls it will return.
+
+---
+
+I want the existing get endpoint to include the sensor data in the existing response structure, if the weather data is valid for the latitude and lingitude
+
+---
+
+Can you add some descriptive logging to the server? I want to see the requests and responses (api key hidden)
+
+---
+
+On the sensor data, can we add a "sensorName" field and generate an identifier for it?
+
+---
+
+Okay I want the id to identifier the data point, not the name of the sensor
+
+---
+
+Any concerns?
+
+---
+
+Fix 2 and 3
+
+---
+
+Yeah let's do it
+
+---
+
+Seems like the actions are held up Evaluating deploy.if
+Evaluating: success()
+Result: true
+Requested labels: ubuntu-latest
+Job defined at: jpotter185/tidbit-backend/.github/workflows/deploy.yml@refs/heads/main
+Waiting for a runner to pick up this job...
+
+---
+
+Hang on what are you doing?
+
+---
+
+So github is down?
+
+---
+
+The project is ran under a specific service account
+
+---
+
+<task-notification>
+<task-id>bw4i3rpra</task-id>
+<tool-use-id>toolu_01LDfntcBJLGCt1CS8tvq9Lb</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jackpotter-projects-tidbit-backend/99556bf8-427f-40e6-a2fd-ee232b5f5e00/tasks/bw4i3rpra.output</output-file>
+<status>failed</status>
+<summary>Background command "Poll home server until new build responds on sensor route" failed with exit code 1</summary>
+</task-notification>
+
+---
+
+Stop doing things
+
+---
+
+How do I "switch" to the service account user on the server?
+
+---
+
+Okay it's running now
+
+---
+
+Write me a curl command to call it. weather.tallyo.us
+
+---
+
+Do you remember my api key?
+
+---
+
+Okay so the next thing I want to do- I have an arduino and a weather sensor, what sort of program do I need to send that?
+
+---
+
+It's an ASAIR AM2302
+
+---
+
+Okay I got it working now, the sensor is reporting temperature and it's showing up on the tidbit. Do we round the temperature up or down?
+
+---
+
+Yeah make that change and commit and push it
