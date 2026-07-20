@@ -38,7 +38,11 @@ func (w *WeatherClient) GetWeather(req WeatherRequest) (*WeatherResponse, error)
     for attempt := 1; attempt <= maxAttempts; attempt++ {
         raw, err := w.fetch(url)
         if err == nil {
-            return parseResponse(raw), nil
+            var parsed *WeatherResponse
+            parsed, err = parseResponse(raw)
+            if err == nil {
+                return parsed, nil
+            }
         }
         lastErr = err
         if attempt < maxAttempts {
@@ -69,8 +73,22 @@ func (w *WeatherClient) fetch(url string) (openMeteoResponse, error) {
     return raw, nil
 }
 
-func parseResponse(raw openMeteoResponse) *WeatherResponse {
-    currentHour, _ := strconv.Atoi(raw.Current.Time[11:13])
+func parseResponse(raw openMeteoResponse) (*WeatherResponse, error) {
+    // Current.Time is ISO 8601 local time ("2026-07-19T21:00"); the hour
+    // indexes into the hourly arrays because timezone=auto keeps them local.
+    if len(raw.Current.Time) < 13 {
+        return nil, fmt.Errorf("unexpected current time from open-meteo: %q", raw.Current.Time)
+    }
+    currentHour, err := strconv.Atoi(raw.Current.Time[11:13])
+    if err != nil || currentHour < 0 || currentHour > 23 {
+        return nil, fmt.Errorf("unexpected current time from open-meteo: %q", raw.Current.Time)
+    }
+    if len(raw.Daily.MinTemp) == 0 || len(raw.Daily.MaxTemp) == 0 {
+        return nil, fmt.Errorf("missing daily data from open-meteo")
+    }
+    if currentHour >= len(raw.Hourly.PrecipProbability) || currentHour >= len(raw.Hourly.UVIndex) {
+        return nil, fmt.Errorf("missing hourly data from open-meteo for hour %d", currentHour)
+    }
 
     return &WeatherResponse{
         CurrentTemperature: int(raw.Current.Temperature),
@@ -83,5 +101,5 @@ func parseResponse(raw openMeteoResponse) *WeatherResponse {
         PrecipProbability:  int(raw.Hourly.PrecipProbability[currentHour]),
         UVIndex:            int(raw.Hourly.UVIndex[currentHour]),
         TZOffset:           raw.UtcOffsetSeconds / 3600,
-    }
+    }, nil
 }

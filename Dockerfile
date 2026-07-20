@@ -6,7 +6,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/tidbit-backend ./cmd/server
 
 FROM alpine:3.20
-RUN adduser -D -H appuser
+RUN adduser -D -H appuser && mkdir /data && chown appuser /data
 USER appuser
 COPY --from=builder /bin/tidbit-backend /bin/tidbit-backend
 EXPOSE 6769
