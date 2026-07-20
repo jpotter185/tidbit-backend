@@ -1,0 +1,5 @@
+Hi. This is the tidbit-backend. Take a look at the code
+
+---
+
+Update the api key check
