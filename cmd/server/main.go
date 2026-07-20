@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/subtle"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -10,10 +12,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func apiKeyMiddleware() gin.HandlerFunc {
+func apiKeyMiddleware(apiKey string) gin.HandlerFunc {
     return func(c *gin.Context) {
         key := c.GetHeader("X-API-Key")
-        if key != os.Getenv("API_KEY") {
+        if subtle.ConstantTimeCompare([]byte(key), []byte(apiKey)) != 1 {
             c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
             c.Abort()
             return
@@ -23,11 +25,16 @@ func apiKeyMiddleware() gin.HandlerFunc {
 }
 
 func main() {
+    apiKey := os.Getenv("API_KEY")
+    if apiKey == "" {
+        log.Fatal("API_KEY environment variable must be set")
+    }
+
     weatherClient := weather.NewWeatherClient()
 
     r := gin.Default()
 
-    r.GET("/api/v1/weather", apiKeyMiddleware(), func(c *gin.Context) {
+    r.GET("/api/v1/weather", apiKeyMiddleware(apiKey), func(c *gin.Context) {
         latStr := c.Query("lat")
         lonStr := c.Query("lon")
 
