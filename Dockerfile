@@ -1,11 +1,11 @@
-FROM golang:1.25-alpine AS builder
+FROM golang:1.27.4-alpine AS builder
 WORKDIR /src
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/tidbit-backend ./cmd/server
 
-FROM alpine:3.20
+FROM alpine:3.24
 RUN adduser -D -H appuser && mkdir /data && chown appuser /data
 USER appuser
 COPY --from=builder /bin/tidbit-backend /bin/tidbit-backend
