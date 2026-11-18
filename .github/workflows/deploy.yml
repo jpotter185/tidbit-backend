@@ -33,5 +33,8 @@ jobs:
         run: cat -A ~/.ssh/config
 
       - name: Deploy
+        env:
+          TUNNEL_SERVICE_TOKEN_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          TUNNEL_SERVICE_TOKEN_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         run: |
           ssh gh-svc-account@ssh.tallyo.us "cd ~/projects/tidbit-backend && git pull origin main && ./deploy.sh"
